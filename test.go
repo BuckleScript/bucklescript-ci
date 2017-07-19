@@ -6,7 +6,8 @@ import (
 		"os/exec"
 		"fmt"
 		"log"
-	"os"
+		"os"
+		"sync"
 		)
 
 func checkError(err error){
@@ -16,6 +17,7 @@ func checkError(err error){
 }
 
 func testTheme(theme string){
+	fmt.Println("Removing",theme)
 	os.RemoveAll(theme)
 	cmd := exec.Command("bsb", "-theme",theme,"-init",theme)
 	output, err:= cmd.CombinedOutput()
@@ -39,8 +41,14 @@ func main(){
 	
 	// testTheme("basic")
 	// testTheme("generator")
+	var wg sync.WaitGroup
 	for _, theme := range []string{"basic", "basic-reason","generator","minimal"} {
 		fmt.Println("Test theme", theme)
-		testTheme(theme)
+		wg.Add(1)
+		go (func(theme string){
+			defer wg.Done()
+			testTheme(theme)
+		})(theme)
 	}
+	wg.Wait()
 }		
