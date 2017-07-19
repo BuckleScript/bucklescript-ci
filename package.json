@@ -1,10 +1,7 @@
 {
-    "dependencies": {
-        "bs-platform" : "github:bucklescript/bucklescript"
-    },
     "name": "bucklescript-ci",
     "version": "0.1.0",
     "scripts": {
-        "test" : "node test.js"
+        "test" : "go run test.go"
     }
 }
